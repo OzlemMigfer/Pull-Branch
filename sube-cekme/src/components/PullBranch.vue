@@ -6,14 +6,14 @@
         <div class="cascading-dropdown">
             <div class="dropdown">
                 <span>Lisans Türü : </span>
-                <select v-model="selectedLicence" :required="true">
+                <select @change="onChange" id="licence" v-model="selectedLicence" :required="true">
                     <option value="">Lisans Türü Seçiniz</option>
                     <option v-for="(item, index) in items" :key="item.id" :value="index">{{index}}{{ item.name }}</option>
                 </select>
             </div>
             <div class="dropdown">
                 <span>Sınıf Seviyesi : </span>
-                <select :disabled="indexes.length == 0" v-model="selectedGrade">
+                <select @change="onChange" id="grade" v-model="selectedGrade" :disabled="indexes.length == 0">
                     <option value="">Sınıf Seviyesi Seçiniz</option>
                     <option v-for="(index) in indexes" :key="index.id">{{ index }}{{ index.id }}</option>
                 </select>
@@ -38,11 +38,12 @@
               type="file" 
               accept=".xls,.xlsx"
               class="my_data mt-8 mb-5"
-              @change="importExcel" 
+              @change="importExcel"
               id="upload" 
           />
           <v-spacer></v-spacer>
           <v-data-table
+            id="selectBranch"
             v-model="selected"
             item-key="sıra"
             show-select
@@ -123,6 +124,7 @@ export default{
               });           
               const wsname = workbook.SheetNames[0]; 
               const importedBranch = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]);
+              // document.getElementById("jsondata").innerHTML = JSON.stringify(importedBranch);
               this.branches = this.branches.concat(importedBranch);
               this.addAutoSortNumbers();
             } catch (e) {
@@ -142,8 +144,15 @@ export default{
         },
         //kaydet butonu
         save(){
-          
+          //seçilen dataları kontrol etmke için
+          document.getElementById("licence").innerHTML = JSON.stringify(this.selectedLicence);
+          document.getElementById("grade").innerHTML = JSON.stringify(this.selectedGrade);
+          document.getElementById("selectBranch").innerHTML = JSON.stringify(this.selected);
+        },
+        onChange() {         
+          console.log(this.selected,this.selectedLicence,this.selectedGrade);
         }
+        
     }
 };
 </script>
