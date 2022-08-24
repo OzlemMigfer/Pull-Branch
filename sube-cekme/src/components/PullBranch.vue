@@ -6,7 +6,7 @@
         <div class="cascading-dropdown">
             <div class="dropdown">
                 <span>Lisans Türü : </span>
-                <select v-model="selectedLicence">
+                <select v-model="selectedLicence" :required="true">
                     <option value="">Lisans Türü Seçiniz</option>
                     <option v-for="(item, index) in items" :key="item.id" :value="index">{{index}}{{ item.name }}</option>
                 </select>
@@ -18,6 +18,18 @@
                     <option v-for="(index) in indexes" :key="index.id">{{ index }}{{ index.id }}</option>
                 </select>
             </div>
+            <!-- toggle-switch for 'genel kullanım' -->
+            <div class="mr-n16">
+              <v-container
+                class="px-0 d-flex justify-end mr-n16 mt-n16 "
+                fluid
+              >
+                <v-switch
+                  v-model="switch1"
+                  :label="` Genel Kullanım`"
+                ></v-switch>
+              </v-container>
+            </div>
         </div>
 
         <!-- excel dosyası yuklemek -->
@@ -25,7 +37,7 @@
           <input 
               type="file" 
               accept=".xls,.xlsx"
-              class="my_input mt-8"
+              class="my_data mt-8 mb-5"
               @change="importExcel" 
               id="upload" 
           />
@@ -37,16 +49,20 @@
             :headers="headers"
             :items="branches"
             sort-by="sıra"
-          >
-            
-
+          >       
           </v-data-table>
-          
-        </div>
-        
+          <v-row class="d-flex justify-end mr-5 mt-5 mb-5">
+            <v-btn
+              depressed
+              color="primary"
+              id="saveBtn"
+              @click="save"
+            >
+            Kaydet
+            </v-btn>
+          </v-row>         
+        </div>        
     </div>
-    
-    
 </template>
 
 
@@ -74,7 +90,8 @@ export default{
           {text: "Sıra", value: "sıra"},
           {text: "Şube", value: "sube"}
         ],
-        branches: []       
+        branches: [],
+        switch1: true      
     }),
     watch: {
         selectedLicence: function () {
@@ -123,6 +140,10 @@ export default{
             number++;
           });
         },
+        //kaydet butonu
+        save(){
+          
+        }
     }
 };
 </script>
